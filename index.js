@@ -21,28 +21,36 @@ async function run() {
         const productCollection = client.db('modernTelecom').collection('product');
 
 
-        //POST
-        // app.post('products', async (req, res) => {
-        //     const product = req.body;
+        // POST
+        app.post('/products', async (req, res) => {
+            const product = req.body;
 
-        //     if (!product.name || !product.image || !product.description || !product.price || !product.quantity || !product.sname) {
-        //         return res.send({ success: false, error: "Please Provide all Information" })
-        //     }
+            if (!product.name || !product.image || !product.description || !product.price || !product.quantity || !product.sname) {
+                return res.send({ success: false, error: "Please Provide all Information" })
+            }
 
-        //     const result = await productCollection.insertOne(product);
-        //})
+            const result = await productCollection.insertOne(product);
+            res.send({ success: true, message: `Successfully inserted ${product.name} with id ${result.insertedId}` })
+        })
 
-        //Get
+        // Get
 
         app.get('/product', async (req, res) => {
             const query = {};
             const cursor = productCollection.find(query);
             const products = await cursor.toArray();
             res.send(products);
+        });
+
+        app.get('/product/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const product = await productCollection.findOne(query);
+            res.send(product);
         })
     }
-    finally {
-
+    catch (error) {
+        console.log(error);
     }
 }
 run().catch(console.dir);
