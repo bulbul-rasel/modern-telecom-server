@@ -39,12 +39,12 @@ async function run() {
         app.post('/products', async (req, res) => {
             const product = req.body;
 
-            if (!product.name || !product.image || !product.description || !product.price || !product.quantity || !product.sname) {
+            if (!product.name || !product.email || !product.image || !product.description || !product.price || !product.quantity || !product.sname) {
                 return res.send({ success: false, error: "Please Provide all Information" })
             }
 
             const result = await productCollection.insertOne(product);
-            res.send({ success: true, message: `Successfully inserted ${product.name} with id ${result.insertedId}` })
+            res.send({ success: true, message: `Successfully inserted ${product.name}` })
         })
 
         // Get
@@ -55,6 +55,16 @@ async function run() {
             const products = await cursor.toArray();
             res.send(products);
         });
+
+        //myorder get api
+
+        app.get('/myitem', async (req, res) => {
+            const email = req.query.email;
+            const query = { email: email };
+            const cursor = productCollection.find(query);
+            const myItem = await cursor.toArray();
+            res.send(myItem);
+        })
 
         app.get('/product/:id', async (req, res) => {
             const id = req.params.id;
