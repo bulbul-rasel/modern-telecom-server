@@ -132,7 +132,7 @@ app.get('/', (req, res) => {
     res.send('Running server');
 });
 app.get('/test', (req, res) => {
-    res.send('Test server');
+    res.send('Test server again');
 });
 
 app.listen(port, () => {
