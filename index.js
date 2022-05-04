@@ -122,6 +122,24 @@ async function run() {
             res.send({ success: true, message: "Successfully deleted " })
 
         });
+
+        // update quantity
+        app.put('/product/:id', async (req, res) => {
+            const id = req.params.productId;
+            const updatedQuantity = req.body;
+            console.log(updatedQuantity);
+            const filter = { _id: ObjectId(id) };
+            const options = { upsert: true };
+            const updatedDoc = {
+                $set: {
+                    quantity: updatedQuantity.newQuantity,
+                }
+            };
+            const result = await productCollection.updateOne(filter, updatedDoc, options);
+            res.send(result);
+
+        })
+
     }
     catch (error) {
         console.log(error);
