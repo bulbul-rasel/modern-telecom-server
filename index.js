@@ -46,8 +46,6 @@ const validateId = (req, res, next) => {
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.cqtkf.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
-
-
 async function run() {
     try {
         await client.connect();
@@ -126,16 +124,18 @@ async function run() {
         // update quantity
         app.put('/product/:id', async (req, res) => {
             const id = req.params.id;
-            const updatedQuantity = req.body;
+            const updatedQuantity = req.body.updatedQuantity;
             console.log(updatedQuantity);
             const filter = { _id: ObjectId(id) };
+            console.log(filter);
             const options = { upsert: true };
             const updatedDoc = {
                 $set: {
-                    quantity: updatedQuantity.quantity,
+                    quantity: updatedQuantity
                 }
             };
             const result = await productCollection.updateOne(filter, updatedDoc, options);
+            console.log(updatedDoc);
             res.send(result);
 
         })
