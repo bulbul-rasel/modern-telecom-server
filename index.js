@@ -150,9 +150,6 @@ run().catch(console.dir);
 app.get('/', (req, res) => {
     res.send('Running server');
 });
-app.get('/test', (req, res) => {
-    res.send('Test server again');
-});
 
 app.listen(port, () => {
     console.log('Listening to port', port);
